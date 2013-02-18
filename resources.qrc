@@ -1,0 +1,11 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+<file alias="logo.png">images/openquake_logo.png</file>
+<file alias="new.png">images/document-new.png</file>
+<file alias="open.png">images/document-open.png</file>
+<file alias="save.png">images/document-save.png</file>
+<file alias="saveas.png">images/document-save-as.png</file>
+<file alias="quit.png">images/window-close.png</file>
+
+</qresource>
+</RCC>
