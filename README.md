@@ -6,10 +6,10 @@ is to be able to help the end user in
 generating NRML input files starting from
 a csv or a template. 
 
-Generate resources::
+Generate resources:
     
     $ ./create_resources
 
-Usage::
+Usage:
     
     $ python main.py
