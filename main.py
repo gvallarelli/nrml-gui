@@ -74,29 +74,69 @@ class MainWindow(QtGui.QMainWindow):
         self._create_bars()
         layout = QtGui.QVBoxLayout()
 
-        self.table = QtGui.QTableWidget(12, 10)
-        # Resize mode to stretch
-        self.table.horizontalHeader().setResizeMode(1)
-        self.table.verticalHeader().setResizeMode(1)
-        layout.addWidget(self.table)
-        self.setCentralWidget(self.table)
-
     def file_new(self):
+        #FIXME
         print "pressed ctrl-n"
 
+    def get_data(self, fname):
+        #FIXME
+        with open(fname, 'rb') as csvfile:
+            self.header = [x.strip() for x in csvfile.next().split(',')]
+            reader = csv.DictReader(csvfile, fieldnames=self.header)
+            return list(reader)
+
+    def populate_table(self, rows):
+        #FIXME
+        table = QtGui.QTableWidget()
+        self.sorted_header = sorted(rows[0].keys())
+        self.row_count = len(rows)
+        self.col_count = len(self.sorted_header)
+
+        table.setRowCount(self.row_count)
+        table.setColumnCount(self.col_count)
+        table.setHorizontalHeaderLabels(self.sorted_header)
+
+        for row, row_data in enumerate(rows):
+            for column, column_key in enumerate(self.sorted_header):
+                item = QtGui.QTableWidgetItem(row_data[column_key])
+                table.setItem(row, column, item)
+
+        return table
 
     def file_open(self):
-        fname = QtGui.QFileDialog.getOpenFileName(
-                self, 'Open file', os.path.expanduser("~"), 'Data *.csv')
-        print fname
+        #FIXME
+        self.fname = QtGui.QFileDialog.getOpenFileName(
+                self, 'Open file', os.path.expanduser("~"),
+                'Exposure Data *.csv')
+        if self.fname:
+            rows = self.get_data(self.fname)
+
+            layout = QtGui.QVBoxLayout()
+            self.table = self.populate_table(rows)
+            # Resize Mode - Stretch
+            self.table.horizontalHeader().setResizeMode(1)
+            self.table.verticalHeader().setResizeMode(1)
+            layout.addWidget(self.table)
+            self.setCentralWidget(self.table)
+
 
     def file_close(self):
+        #FIXME
         QtGui.QApplication.quit()
 
     def file_save(self):
-        print 'pressed ctrl-s file save'
+        #FIXME
+        lines = [', '.join(self.header) + '\n']
+        for row in xrange(self.row_count):
+            row = dict(zip(self.sorted_header,
+                       [str(self.table.item(row, col).text())
+                        for col in xrange(self.col_count)]))
+            lines.append(', '.join([row[key] for key in self.header]) + '\n')
+        with open(self.fname, 'w') as csv_file:
+            csv_file.writelines(lines)
 
     def file_saveas(self):
+        #FIXME
         print 'pressed ctrl-something file save as'
 
 def main():
